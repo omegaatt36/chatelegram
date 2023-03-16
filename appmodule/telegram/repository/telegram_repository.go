@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/omegaatt36/chatgpt-telegram/appmodule/telegram/usecase"
+	"github.com/omegaatt36/chatelegram/appmodule/telegram/usecase"
 	"gopkg.in/telebot.v3"
 )
 

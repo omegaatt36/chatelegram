@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/omegaatt36/chatgpt-telegram/app"
-	chatgpttelegram "github.com/omegaatt36/chatgpt-telegram/app/chatgpt-telegram"
-	chatgpt "github.com/omegaatt36/chatgpt-telegram/appmodule/chatgpt/repository"
-	telegram "github.com/omegaatt36/chatgpt-telegram/appmodule/telegram/repository"
+	"github.com/omegaatt36/chatelegram/app"
+	chatelegram "github.com/omegaatt36/chatelegram/app/bot"
+	gpt "github.com/omegaatt36/chatelegram/appmodule/gpt/repository"
+	telegram "github.com/omegaatt36/chatelegram/appmodule/telegram/repository"
 	"github.com/sashabaranov/go-openai"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/telebot.v3"
@@ -42,17 +42,17 @@ func Main(ctx context.Context) {
 
 	client := openai.NewClientWithConfig(cfg)
 
-	service := chatgpttelegram.NewService(
+	service := chatelegram.NewService(
 		bot,
 		telegram.NewTelegramBot(bot),
-		chatgpt.NewOpenAIClient(client,
-			chatgpt.WithMaxToken{MaxToken: config.maxToken},
-			chatgpt.WithCompletionsEngine{Engine: config.completionsEngine},
+		gpt.NewOpenAIClient(client,
+			gpt.WithMaxToken{MaxToken: config.maxToken},
+			gpt.WithCompletionsEngine{Engine: config.completionsEngine},
 		),
 	)
 
 	service.Start(ctx,
-		chatgpttelegram.UseAllowedUsers{AllowedUsers: config.allowedUsers},
+		chatelegram.UseAllowedUsers{AllowedUsers: config.allowedUsers},
 	)
 
 	<-ctx.Done()
@@ -67,8 +67,8 @@ func main() {
 
 	app.Flags = append(app.Flags,
 		&cli.StringFlag{
-			Name:        "chatgpt-api-key",
-			EnvVars:     []string{"CHATGPT_API_KEY"},
+			Name:        "openai-api-key",
+			EnvVars:     []string{"OPENAI_API_KEY"},
 			Destination: &config.apiKey,
 			Required:    true,
 		},
@@ -79,30 +79,30 @@ func main() {
 			Required:    true,
 		},
 		&cli.IntFlag{
-			Name:        "chatgpt-max-token",
-			EnvVars:     []string{"CHATGPT_MAX_TOKEN"},
+			Name:        "gpt-max-token",
+			EnvVars:     []string{"GPT_MAX_TOKEN"},
 			Destination: &config.maxToken,
 			DefaultText: "3000",
 			Value:       3000,
 		},
 		&cli.StringFlag{
-			Name:        "chatgpt-completions-model",
-			EnvVars:     []string{"CHATGPT_COMPLETIONS_MODEL"},
+			Name:        "gpt-completions-model",
+			EnvVars:     []string{"GPT_COMPLETIONS_MODEL"},
 			Destination: &config.completionsEngine,
 			DefaultText: "text-davinci-003",
 			Value:       "text-davinci-003",
 		},
 		&cli.IntFlag{
-			Name:        "chatgpt-timeout",
-			EnvVars:     []string{"CHATGPT_TIMEOUT"},
+			Name:        "gpt-timeout",
+			EnvVars:     []string{"GPT_TIMEOUT"},
 			Destination: &config.timeout,
 			DefaultText: "60",
 			Value:       60,
 		},
 		&cli.MultiInt64Flag{
 			Target: &cli.Int64SliceFlag{
-				Name:    "allowed-users",
-				EnvVars: []string{"ALLOWED_USERS"},
+				Name:    "telegram-allowed-users",
+				EnvVars: []string{"TELEGRAM_ALLOWED_USERS"},
 			},
 			Value:       []int64{},
 			Destination: &config.allowedUsers,

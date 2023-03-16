@@ -1,12 +1,12 @@
-package chatgpttelegram
+package chatelegram
 
 import (
 	"context"
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	chatgpt "github.com/omegaatt36/chatgpt-telegram/appmodule/chatgpt/usecase"
-	telegram "github.com/omegaatt36/chatgpt-telegram/appmodule/telegram/usecase"
+	gpt "github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
+	telegram "github.com/omegaatt36/chatelegram/appmodule/telegram/usecase"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,11 +36,11 @@ func TestService(t *testing.T) {
 			Times(1).Return(nil)
 	}
 
-	mockChatGPT := chatgpt.NewMockChatGPTUseCase(controller)
+	mockGPT := gpt.NewMockGPTUseCase(controller)
 	{
-		mockChatGPT.EXPECT().Stream(ctx, question).Times(1).Return(readOnlyCh, readOnlyErrCh)
+		mockGPT.EXPECT().Stream(ctx, question).Times(1).Return(readOnlyCh, readOnlyErrCh)
 	}
-	service := NewService(nil, mockTelegram, mockChatGPT)
+	service := NewService(nil, mockTelegram, mockGPT)
 	service.ctx = ctx
-	s.NoError(service.processChatGPTQuestion(chatID, question))
+	s.NoError(service.processTextCompeltion(chatID, question))
 }

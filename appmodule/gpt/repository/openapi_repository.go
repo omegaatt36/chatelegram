@@ -5,21 +5,21 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/omegaatt36/chatgpt-telegram/appmodule/chatgpt/usecase"
+	"github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
 	"github.com/pkg/errors"
 	"github.com/sashabaranov/go-openai"
 )
 
-// OpenAIClient is implement of usecase.ChatGPTUseCase.
+// OpenAIClient is implement of usecase.GPTUseCase.
 type OpenAIClient struct {
 	client *openai.Client
 
 	common
 }
 
-var _ usecase.ChatGPTUseCase = &OpenAIClient{}
+var _ usecase.GPTUseCase = &OpenAIClient{}
 
-// NewOpenAIClient returns implement of usecase.ChatGPTUseCase.
+// NewOpenAIClient returns implement of usecase.GPTUseCase.
 func NewOpenAIClient(client *openai.Client, options ...ClientOption) *OpenAIClient {
 	c := &OpenAIClient{
 		client: client,
@@ -36,7 +36,7 @@ func NewOpenAIClient(client *openai.Client, options ...ClientOption) *OpenAIClie
 	return c
 }
 
-// Stream asks ChatGPT the question and receives answer.
+// Stream asks GPT the question and receives answer.
 func (c *OpenAIClient) Stream(ctx context.Context, question string) (<-chan string, <-chan error) {
 	res := make(chan string)
 	errCh := make(chan error)

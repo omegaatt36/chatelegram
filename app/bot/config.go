@@ -1,4 +1,4 @@
-package chatgpttelegram
+package chatelegram
 
 type config interface {
 	use(*Service)

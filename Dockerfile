@@ -8,7 +8,7 @@ RUN ["go", "mod", "download"]
 
 COPY . .
 
-ENV APP_NAME=chatgpt-telegram
+ENV APP_NAME=chatelegram
 
 RUN ["go", "build", "-o", "build/${APP_NAME}"]
 

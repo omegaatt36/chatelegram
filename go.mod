@@ -1,4 +1,4 @@
-module github.com/omegaatt36/chatgpt-telegram
+module github.com/omegaatt36/chatelegram
 
 go 1.19
 

@@ -1,17 +1,17 @@
-package chatgpttelegram
+package chatelegram
 
 import (
 	"context"
 	"log"
 	"unicode/utf8"
 
-	chatgpt "github.com/omegaatt36/chatgpt-telegram/appmodule/chatgpt/usecase"
-	telegram "github.com/omegaatt36/chatgpt-telegram/appmodule/telegram/usecase"
+	gpt "github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
+	telegram "github.com/omegaatt36/chatelegram/appmodule/telegram/usecase"
 	"gopkg.in/telebot.v3"
 	"gopkg.in/telebot.v3/middleware"
 )
 
-// Service is ChatGPT agent via telegram bot.
+// Service is GPT agent via telegram bot.
 type Service struct {
 	ctx context.Context
 
@@ -19,11 +19,11 @@ type Service struct {
 
 	bot      *telebot.Bot
 	telegram telegram.TelegramUseCase
-	gpt      chatgpt.ChatGPTUseCase
+	gpt      gpt.GPTUseCase
 }
 
 // NewService return Service with use cases.
-func NewService(bot *telebot.Bot, tu telegram.TelegramUseCase, cu chatgpt.ChatGPTUseCase) *Service {
+func NewService(bot *telebot.Bot, tu telegram.TelegramUseCase, cu gpt.GPTUseCase) *Service {
 	return &Service{
 		bot:      bot,
 		telegram: tu,
@@ -33,7 +33,7 @@ func NewService(bot *telebot.Bot, tu telegram.TelegramUseCase, cu chatgpt.ChatGP
 
 func (s *Service) registerEndpoint() {
 	s.bot.Handle("/start", s.handleStart)
-	s.bot.Handle(telebot.OnText, s.chatGPTQuestion)
+	s.bot.Handle(telebot.OnText, s.handleTextCompletion)
 }
 
 func (s *Service) useMiddleware() {
@@ -62,15 +62,15 @@ func (s *Service) Start(ctx context.Context, configs ...config) {
 	}()
 }
 
-func (s Service) processChatGPTQuestion(chatID int64, question string) error {
-	messageCh, errChatGPTCh := s.gpt.Stream(s.ctx, question)
+func (s Service) processTextCompeltion(chatID int64, question string) error {
+	textCompletionStreamCh, errTextCompletionStreamChCh := s.gpt.Stream(s.ctx, question)
 
 	errCh := make(chan error, 1)
 	defer close(errCh)
 
 	done := make(chan struct{}, 1)
 	go func() {
-		if err := s.telegram.SendAsLiveOutput(chatID, messageCh); err != nil {
+		if err := s.telegram.SendAsLiveOutput(chatID, textCompletionStreamCh); err != nil {
 			errCh <- err
 		}
 		done <- struct{}{}
@@ -91,7 +91,7 @@ func (s Service) processChatGPTQuestion(chatID int64, question string) error {
 			}
 
 			return err
-		case err, ok := <-errChatGPTCh:
+		case err, ok := <-errTextCompletionStreamChCh:
 			if !ok {
 				return nil
 			}
@@ -104,7 +104,7 @@ func (s Service) processChatGPTQuestion(chatID int64, question string) error {
 	}
 }
 
-func (s *Service) chatGPTQuestion(c telebot.Context) error {
+func (s *Service) handleTextCompletion(c telebot.Context) error {
 	if utf8.RuneCountInString(c.Message().Text) == 0 {
 		return nil
 	}
@@ -113,7 +113,7 @@ func (s *Service) chatGPTQuestion(c telebot.Context) error {
 		c.Message().ID, c.Message().Chat.ID, c.Message().Text)
 	defer func() { log.Printf("done(%d)\n", c.Message().ID) }()
 
-	err := s.processChatGPTQuestion(c.Message().Chat.ID, c.Message().Text)
+	err := s.processTextCompeltion(c.Message().Chat.ID, c.Message().Text)
 	if err != nil {
 		if ierr := c.Send(err.Error()); ierr != nil {
 			log.Fatalln(ierr)
@@ -124,5 +124,5 @@ func (s *Service) chatGPTQuestion(c telebot.Context) error {
 }
 
 func (s *Service) handleStart(c telebot.Context) error {
-	return c.Send("wellcome to use ChatGPT agent, please ask me something.")
+	return c.Send("wellcome to use GPT agent, please ask me something.")
 }

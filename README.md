@@ -1,4 +1,4 @@
-ChatGPT Telegram bot in Golang
+OpenAI text completion Telegram bot in Golang
 ======================
 
 Requirements:
@@ -7,9 +7,9 @@ Requirements:
 
 How to Use
 ```bash
-go run main.go --chatgpt-api-key=xxx --telegram-bot-token=xxx
+go run main.go --openai-api-key=xxx --telegram-bot-token=xxx
 
 or 
 
-CHATGPT_API_KEY=xxx TELEGRAM_BOT_TOKEN=xxx go run main.go
+OPENAI_API_KEY=xxx TELEGRAM_BOT_TOKEN=xxx go run main.go
 ```

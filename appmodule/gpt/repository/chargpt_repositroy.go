@@ -4,21 +4,21 @@ import (
 	"context"
 
 	"github.com/PullRequestInc/go-gpt3"
-	"github.com/omegaatt36/chatgpt-telegram/appmodule/chatgpt/usecase"
+	"github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
 )
 
-// ChatGPTClient is implement of usecase.ChatGPTUseCase.
-type ChatGPTClient struct {
+// GPT3Client is implement of usecase.GPTUseCase.
+type GPT3Client struct {
 	client gpt3.Client
 
 	common
 }
 
-var _ usecase.ChatGPTUseCase = &ChatGPTClient{}
+var _ usecase.GPTUseCase = &GPT3Client{}
 
-// NewChatGPTClient returns implement of usecase.ChatGPTUseCase.
-func NewChatGPTClient(client gpt3.Client, options ...ClientOption) *ChatGPTClient {
-	c := &ChatGPTClient{
+// NewGPT3Client returns implement of usecase.GPTUseCase.
+func NewGPT3Client(client gpt3.Client, options ...ClientOption) *GPT3Client {
+	c := &GPT3Client{
 		client: client,
 		common: common{
 			maxToken: 1000,
@@ -33,8 +33,8 @@ func NewChatGPTClient(client gpt3.Client, options ...ClientOption) *ChatGPTClien
 	return c
 }
 
-// Stream asks ChatGPT the question and receives answer.
-func (c *ChatGPTClient) Stream(ctx context.Context, question string) (<-chan string, <-chan error) {
+// Stream asks GPT the question and receives answer.
+func (c *GPT3Client) Stream(ctx context.Context, question string) (<-chan string, <-chan error) {
 	res := make(chan string)
 	errCh := make(chan error)
 	go func() {
