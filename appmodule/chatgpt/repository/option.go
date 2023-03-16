@@ -2,7 +2,7 @@ package repository
 
 // ClientOption defines how to inject option.
 type ClientOption interface {
-	injectOption(*ChatGPTClient)
+	injectOption(*common)
 }
 
 var _ ClientOption = &WithMaxToken{}
@@ -12,8 +12,8 @@ type WithMaxToken struct {
 	MaxToken int
 }
 
-func (o WithMaxToken) injectOption(client *ChatGPTClient) {
-	client.maxToken = o.MaxToken
+func (o WithMaxToken) injectOption(c *common) {
+	c.maxToken = o.MaxToken
 }
 
 var _ ClientOption = &WithCompletionsEngine{}
@@ -23,6 +23,6 @@ type WithCompletionsEngine struct {
 	Engine string
 }
 
-func (o WithCompletionsEngine) injectOption(client *ChatGPTClient) {
-	client.engine = o.Engine
+func (o WithCompletionsEngine) injectOption(c *common) {
+	c.engine = o.Engine
 }

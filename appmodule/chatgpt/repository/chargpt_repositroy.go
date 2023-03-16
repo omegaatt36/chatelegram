@@ -11,8 +11,7 @@ import (
 type ChatGPTClient struct {
 	client gpt3.Client
 
-	maxToken int
-	engine   string
+	common
 }
 
 var _ usecase.ChatGPTUseCase = &ChatGPTClient{}
@@ -20,13 +19,15 @@ var _ usecase.ChatGPTUseCase = &ChatGPTClient{}
 // NewChatGPTClient returns implement of usecase.ChatGPTUseCase.
 func NewChatGPTClient(client gpt3.Client, options ...ClientOption) *ChatGPTClient {
 	c := &ChatGPTClient{
-		client:   client,
-		maxToken: 1000,
-		engine:   gpt3.TextDavinci003Engine,
+		client: client,
+		common: common{
+			maxToken: 1000,
+			engine:   gpt3.TextDavinci003Engine,
+		},
 	}
 
 	for _, option := range options {
-		option.injectOption(c)
+		option.injectOption(&c.common)
 	}
 
 	return c

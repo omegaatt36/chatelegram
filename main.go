@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/PullRequestInc/go-gpt3"
 	"github.com/omegaatt36/chatgpt-telegram/app"
 	chatgpttelegram "github.com/omegaatt36/chatgpt-telegram/app/chatgpt-telegram"
 	chatgpt "github.com/omegaatt36/chatgpt-telegram/appmodule/chatgpt/repository"
 	telegram "github.com/omegaatt36/chatgpt-telegram/appmodule/telegram/repository"
+	"github.com/sashabaranov/go-openai"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/telebot.v3"
 )
@@ -35,18 +35,17 @@ func Main(ctx context.Context) {
 		return
 	}
 
-	client := gpt3.NewClient(
-		config.apiKey,
-		gpt3.WithHTTPClient(
-			&http.Client{
-				Timeout: time.Duration(time.Duration(config.timeout) * time.Second),
-			},
-		))
+	cfg := openai.DefaultConfig(config.apiKey)
+	cfg.HTTPClient = &http.Client{
+		Timeout: time.Duration(time.Duration(config.timeout) * time.Second),
+	}
+
+	client := openai.NewClientWithConfig(cfg)
 
 	service := chatgpttelegram.NewService(
 		bot,
 		telegram.NewTelegramBot(bot),
-		chatgpt.NewChatGPTClient(client,
+		chatgpt.NewOpenAIClient(client,
 			chatgpt.WithMaxToken{MaxToken: config.maxToken},
 			chatgpt.WithCompletionsEngine{Engine: config.completionsEngine},
 		),
@@ -55,6 +54,7 @@ func Main(ctx context.Context) {
 	service.Start(ctx,
 		chatgpttelegram.UseAllowedUsers{AllowedUsers: config.allowedUsers},
 	)
+
 	<-ctx.Done()
 	log.Println("app stopping")
 }
@@ -89,8 +89,8 @@ func main() {
 			Name:        "chatgpt-completions-model",
 			EnvVars:     []string{"CHATGPT_COMPLETIONS_MODEL"},
 			Destination: &config.completionsEngine,
-			DefaultText: gpt3.TextDavinci003Engine,
-			Value:       gpt3.TextDavinci003Engine,
+			DefaultText: "text-davinci-003",
+			Value:       "text-davinci-003",
 		},
 		&cli.IntFlag{
 			Name:        "chatgpt-timeout",
