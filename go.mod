@@ -6,7 +6,7 @@ require (
 	github.com/PullRequestInc/go-gpt3 v1.1.13
 	github.com/golang/mock v1.6.0
 	github.com/pkg/errors v0.9.1
-	github.com/sashabaranov/go-openai v1.5.1
+	github.com/sashabaranov/go-openai v1.5.2
 	github.com/stretchr/testify v1.8.2
 	github.com/urfave/cli/v2 v2.25.0
 	gopkg.in/telebot.v3 v3.1.3
