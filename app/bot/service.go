@@ -7,6 +7,7 @@ import (
 
 	gpt "github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
 	telegram "github.com/omegaatt36/chatelegram/appmodule/telegram/usecase"
+	"github.com/omegaatt36/chatelegram/src/health"
 	"gopkg.in/telebot.v3"
 	"gopkg.in/telebot.v3/middleware"
 )
@@ -60,6 +61,8 @@ func (s *Service) Start(ctx context.Context, configs ...config) {
 		s.bot.Stop()
 		log.Println("telegram bot is stopped")
 	}()
+
+	go health.StartServer()
 }
 
 func (s Service) processTextCompeltion(chatID int64, question string) error {
