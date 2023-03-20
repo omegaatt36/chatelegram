@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"io"
 
 	"github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
@@ -52,7 +51,7 @@ func (c *OpenAIClient) Stream(ctx context.Context, question string) (<-chan stri
 		defer close(errCh)
 		stream, err := c.client.CreateCompletionStream(ctx, req)
 		if err != nil {
-			fmt.Printf("CompletionStream error: %v\n", err)
+			errCh <- errors.Wrapf(err, "CompletionStream error")
 			return
 		}
 		defer stream.Close()

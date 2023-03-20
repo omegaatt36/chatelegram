@@ -2,7 +2,9 @@ package chatelegram
 
 import (
 	"context"
+	"errors"
 	"log"
+	"os"
 	"unicode/utf8"
 
 	gpt "github.com/omegaatt36/chatelegram/appmodule/gpt/usecase"
@@ -118,7 +120,12 @@ func (s *Service) handleTextCompletion(c telebot.Context) error {
 
 	err := s.processTextCompeltion(c.Message().Chat.ID, c.Message().Text)
 	if err != nil {
-		if ierr := c.Send(err.Error()); ierr != nil {
+		errMessage := err.Error()
+		if errors.Is(err, context.DeadlineExceeded) || os.IsTimeout(err) {
+			errMessage = "OpenAI is currently not responding, please try again later."
+		}
+
+		if ierr := c.Send(errMessage); ierr != nil {
 			log.Fatalln(ierr)
 		}
 	}
