@@ -42,5 +42,5 @@ func TestService(t *testing.T) {
 	}
 	service := NewService(nil, mockTelegram, mockGPT)
 	service.ctx = ctx
-	s.NoError(service.processTextCompeltion(chatID, question))
+	s.NoError(service.processTextCompletion(chatID, question))
 }

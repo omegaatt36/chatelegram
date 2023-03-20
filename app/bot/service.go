@@ -67,7 +67,7 @@ func (s *Service) Start(ctx context.Context, configs ...config) {
 	go health.StartServer()
 }
 
-func (s Service) processTextCompeltion(chatID int64, question string) error {
+func (s Service) processTextCompletion(chatID int64, question string) error {
 	textCompletionStreamCh, errTextCompletionStreamChCh := s.gpt.Stream(s.ctx, question)
 
 	errCh := make(chan error, 1)
@@ -118,7 +118,7 @@ func (s *Service) handleTextCompletion(c telebot.Context) error {
 		c.Message().ID, c.Message().Chat.ID, c.Message().Text)
 	defer func() { log.Printf("done(%d)\n", c.Message().ID) }()
 
-	err := s.processTextCompeltion(c.Message().Chat.ID, c.Message().Text)
+	err := s.processTextCompletion(c.Message().Chat.ID, c.Message().Text)
 	if err != nil {
 		errMessage := err.Error()
 		if errors.Is(err, context.DeadlineExceeded) || os.IsTimeout(err) {
