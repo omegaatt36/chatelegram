@@ -34,17 +34,17 @@ func (m *MockGPTUseCase) EXPECT() *MockGPTUseCaseMockRecorder {
 	return m.recorder
 }
 
-// Stream mocks base method.
-func (m *MockGPTUseCase) Stream(arg0 context.Context, arg1 string) (<-chan string, <-chan error) {
+// CompletionStream mocks base method.
+func (m *MockGPTUseCase) CompletionStream(arg0 context.Context, arg1 string) (<-chan string, <-chan error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Stream", arg0, arg1)
+	ret := m.ctrl.Call(m, "CompletionStream", arg0, arg1)
 	ret0, _ := ret[0].(<-chan string)
 	ret1, _ := ret[1].(<-chan error)
 	return ret0, ret1
 }
 
-// Stream indicates an expected call of Stream.
-func (mr *MockGPTUseCaseMockRecorder) Stream(arg0, arg1 interface{}) *gomock.Call {
+// CompletionStream indicates an expected call of CompletionStream.
+func (mr *MockGPTUseCaseMockRecorder) CompletionStream(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stream", reflect.TypeOf((*MockGPTUseCase)(nil).Stream), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CompletionStream", reflect.TypeOf((*MockGPTUseCase)(nil).CompletionStream), arg0, arg1)
 }

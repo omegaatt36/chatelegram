@@ -35,8 +35,8 @@ func NewOpenAIClient(client *openai.Client, options ...ClientOption) *OpenAIClie
 	return c
 }
 
-// Stream asks GPT the question and receives answer.
-func (c *OpenAIClient) Stream(ctx context.Context, question string) (<-chan string, <-chan error) {
+// CompletionStream asks GPT the question and receives answer.
+func (c *OpenAIClient) CompletionStream(ctx context.Context, question string) (<-chan string, <-chan error) {
 	res := make(chan string)
 	errCh := make(chan error)
 	req := openai.CompletionRequest{

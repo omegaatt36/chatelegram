@@ -38,7 +38,7 @@ func TestService(t *testing.T) {
 
 	mockGPT := gpt.NewMockGPTUseCase(controller)
 	{
-		mockGPT.EXPECT().Stream(ctx, question).Times(1).Return(readOnlyCh, readOnlyErrCh)
+		mockGPT.EXPECT().CompletionStream(ctx, question).Times(1).Return(readOnlyCh, readOnlyErrCh)
 	}
 	service := NewService(nil, mockTelegram, mockGPT)
 	service.ctx = ctx

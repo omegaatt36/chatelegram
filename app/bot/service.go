@@ -68,7 +68,7 @@ func (s *Service) Start(ctx context.Context, configs ...config) {
 }
 
 func (s Service) processTextCompletion(chatID int64, question string) error {
-	textCompletionStreamCh, errTextCompletionStreamChCh := s.gpt.Stream(s.ctx, question)
+	textCompletionStreamCh, errTextCompletionStreamChCh := s.gpt.CompletionStream(s.ctx, question)
 
 	errCh := make(chan error, 1)
 	defer close(errCh)

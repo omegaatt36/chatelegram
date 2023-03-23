@@ -6,5 +6,5 @@ import "context"
 
 // GPTUseCase defines GPT send question use case.
 type GPTUseCase interface {
-	Stream(ctx context.Context, question string) (<-chan string, <-chan error)
+	CompletionStream(ctx context.Context, question string) (<-chan string, <-chan error)
 }
