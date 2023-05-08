@@ -49,6 +49,10 @@ func (s *Service) useMiddleware() {
 func (s *Service) Start(ctx context.Context, configs ...config) {
 	s.ctx = ctx
 
+	for _, config := range configs {
+		config.use(s)
+	}
+
 	s.useMiddleware()
 	s.registerEndpoint()
 
