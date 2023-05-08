@@ -49,6 +49,8 @@ spec:
               value: {{ .Values.image.openai_token }}
             - name: TELEGRAM_BOT_TOKEN
               value: {{ .Values.image.telegram_bot_token }}
+            - name: GPT_MAX_TOKEN
+              value: {{ .Values.image.gpt_max_token | quote }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

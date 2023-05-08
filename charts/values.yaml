@@ -2,8 +2,19 @@ image:
   repository: omegaatt36/chatelegram
   pullPolicy: Always
   tag: "latest"
-  openai_token: FILL_IN_OPENAI_TOKEN
-  telegram_bot_token: FILL_IN_TELEGRAM_BOT_TOKEN
+    
+configmap:
+  name: app-common-config
+  configs:
+    TELEGRAM_BOT_TOKEN: "FILL_IN_TELEGRAM_BOT_TOKEN"
+    TELEGRAM_ALLOWED_USERS: "FILL_IN_TELEGRAM_ALLOWED_USERS"
+    OPENAI_API_KEY: "FILL_IN_OPENAI_TOKEN"
+    GPT_COMPLETIONS_MODEL: "text-davinci-003"
+    GPT_MAX_TOKEN: "3000"
+    GPT_TIMEOUT: "60"
+
+  
+
 
 imagePullSecrets: []
 nameOverride: ""
