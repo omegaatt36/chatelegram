@@ -44,13 +44,9 @@ spec:
               port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          env:
-            - name: OPENAI_API_KEY
-              value: {{ .Values.image.openai_token }}
-            - name: TELEGRAM_BOT_TOKEN
-              value: {{ .Values.image.telegram_bot_token }}
-            - name: GPT_MAX_TOKEN
-              value: {{ .Values.image.gpt_max_token | quote }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "chatelegram.fullname" $ }}-{{ $.Values.configmap.name }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
