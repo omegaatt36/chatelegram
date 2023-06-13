@@ -10,7 +10,7 @@ require (
 	github.com/sashabaranov/go-openai v1.9.5
 	github.com/sirupsen/logrus v1.9.2
 	github.com/stretchr/testify v1.8.3
-	github.com/urfave/cli/v2 v2.25.4
+	github.com/urfave/cli/v2 v2.25.6
 	gopkg.in/telebot.v3 v3.1.3
 )
 
