@@ -7,7 +7,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.16.0
-	github.com/sashabaranov/go-openai v1.12.0
+	github.com/sashabaranov/go-openai v1.14.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.8.3
 	github.com/urfave/cli/v2 v2.25.7
